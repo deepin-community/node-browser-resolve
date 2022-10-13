@@ -1,0 +1,31 @@
+Source: node-browser-resolve
+Maintainer: Debian Javascript Maintainers <pkg-javascript-devel@lists.alioth.debian.org>
+Uploaders: Bastien Roucariès <rouca@debian.org>
+Section: javascript
+Testsuite: autopkgtest-pkg-nodejs
+Priority: optional
+Build-Depends:
+ debhelper-compat (= 13)
+ , mocha <!nocheck>
+ , node-resolve (>> 1.20.0~) <!nocheck>
+ , dh-sequence-nodejs
+Standards-Version: 4.6.0
+Vcs-Browser: https://salsa.debian.org/js-team/node-browser-resolve
+Vcs-Git: https://salsa.debian.org/js-team/node-browser-resolve.git
+Homepage: https://github.com/shtylman/node-browser-resolve#readme
+Rules-Requires-Root: no
+
+Package: node-browser-resolve
+Architecture: all
+Depends:
+ ${misc:Depends}
+ , node-resolve (>> 1.20.0~)
+Multi-Arch: foreign
+Description: node.js resolve algorithm with browser mapping support
+ This package allow one to use javascript function require in
+ browser context and to automatically resolve it.
+ .
+ Moreover, this extension supports the browser field (mapping) if
+ set in package.json file.
+ .
+ Node.js is an event-based server-side JavaScript engine.

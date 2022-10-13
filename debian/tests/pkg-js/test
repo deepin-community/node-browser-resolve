@@ -1,0 +1,22 @@
+set -e
+
+createlinked()
+{
+ (set -e; \
+    mkdir -p test/fixtures/node_modules/linker/node_modules; \
+    cd test/fixtures/node_modules/linker/node_modules ;\
+    ln -s ../../../linked linked) || exit 1
+}
+
+AUTOPKG=${AUTOPKGTEST_TMP:-no}
+if test $AUTOPKG = no; then
+        node scripts/setup-symlinks.js
+#        createlinked
+	mocha -R spec
+else
+	# false*.js files test source files, then are incompatible with
+	# autopkgtest
+	createlinked
+#	node scripts/setup-symlinks.js
+	mocha -R spec `ls test/*.js|grep -v false`
+fi

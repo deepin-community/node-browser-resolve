@@ -1,0 +1,83 @@
+node-browser-resolve (2.0.0-3) unstable; urgency=medium
+
+  [ Debian Janitor ]
+  * Remove constraints unnecessary since buster:
+    + Build-Depends: Drop versioned constraint on mocha.
+
+  [ Bastien Roucariès ]
+  * Upload to unstable
+  * Remove nodejs depends
+
+ -- Bastien Roucariès <rouca@debian.org>  Tue, 28 Sep 2021 16:23:25 +0000
+
+node-browser-resolve (2.0.0-2) unstable; urgency=medium
+
+  * Upload to unstable
+
+ -- Bastien Roucariès <rouca@debian.org>  Thu, 02 Sep 2021 09:04:19 +0000
+
+node-browser-resolve (2.0.0-1) experimental; urgency=medium
+
+  [ Debian Janitor ]
+  * Remove constraints unnecessary since stretch:
+    + Build-Depends: Drop versioned constraint on node-resolve.
+    + node-browser-resolve: Drop versioned constraint on node-resolve and nodejs
+      in Depends.
+
+  [ Bastien Roucariès ]
+  * New upstream version
+  * Bug fix: "node-browser-resolve tests fail with node-resolve 1.12.0 in
+    experimental", thanks to Pirate Praveen (Closes: #935983).
+  * Multi-Arch: foreign
+  * Depends on newer node-resolve
+
+ -- Bastien Roucariès <rouca@debian.org>  Wed, 01 Sep 2021 12:44:12 +0000
+
+node-browser-resolve (1.11.3-3) unstable; urgency=medium
+
+  * Team upload
+
+  [ Debian Janitor ]
+  * Set upstream metadata fields: Bug-Submit.
+
+  [ Xavier Guimard ]
+  * Bump debhelper compatibility level to 13
+  * Declare compliance with policy 4.5.1
+  * Use dh-sequence-nodejs
+  * Add patch for mocha ≥ 8 (Closes: #978297)
+
+ -- Xavier Guimard <yadd@debian.org>  Sun, 27 Dec 2020 09:47:31 +0100
+
+node-browser-resolve (1.11.3-2) unstable; urgency=medium
+
+  * Team upload
+  * Bump debhelper compatibility level to 12
+  * Declare compliance with policy 4.4.1
+  * Add "Rules-Requires-Root: no"
+  * Add debian/gbp.conf
+  * Add upstream/metadata
+  * Switch test and install to pkg-js-tools
+  * Remove dpkg-dev from build dependencies
+
+ -- Xavier Guimard <yadd@debian.org>  Tue, 19 Nov 2019 07:13:56 +0100
+
+node-browser-resolve (1.11.3-1) unstable; urgency=medium
+
+  * New upstream version
+
+ -- Bastien Roucariès <rouca@debian.org>  Sat, 30 Jun 2018 15:38:25 +0200
+
+node-browser-resolve (1.11.2-2) unstable; urgency=medium
+
+  * Move to javascript section
+  * Bump policy and compat (no changes)
+  * Move to salsa
+  * Fix documentation
+
+ -- Bastien Roucariès <rouca@debian.org>  Wed, 16 May 2018 16:37:56 +0200
+
+node-browser-resolve (1.11.2-1) unstable; urgency=low
+
+  * Initial release (Closes: #860036)
+
+ -- Bastien Roucariès <rouca@debian.org>  Mon, 10 Apr 2017 16:23:05 +0200

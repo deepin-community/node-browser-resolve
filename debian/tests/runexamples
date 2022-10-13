@@ -1,0 +1,4 @@
+#!/bin/sh
+set -e
+DEB_PACKAGE='node-browser-resolve'
+find /usr/share/doc/$DEB_PACKAGE/examples/ -name '*.js' -maxdepth 1 -print0 | xargs -0 -n1 node

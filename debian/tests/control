@@ -1,0 +1,2 @@
+Tests: runexamples
+Depends: node-browser-resolve, nodejs (>= 6)

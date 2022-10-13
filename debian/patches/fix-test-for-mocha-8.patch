@@ -1,0 +1,649 @@
+Description: fix test for mocha ≥ 8
+Author: Xavier Guimard <yadd@debian.org>
+Forwarded: no
+Last-Update: 2020-12-27
+
+Index: node-browser-resolve/test/core-sync.js
+===================================================================
+--- node-browser-resolve.orig/test/core-sync.js
++++ node-browser-resolve/test/core-sync.js
+@@ -6,12 +6,12 @@ var shims = {
+     events: 'foo'
+ };
+ 
+-test('shim found', function() {
++it('shim found', function() {
+     var path = resolve.sync('events', { modules: shims });
+     assert.equal(path, 'foo');
+ });
+ 
+-test('core shim not found', function() {
++it('core shim not found', function() {
+     var path = resolve.sync('http', {});
+     assert.equal(path, 'http');
+ });
+Index: node-browser-resolve/test/core.js
+===================================================================
+--- node-browser-resolve.orig/test/core.js
++++ node-browser-resolve/test/core.js
+@@ -6,7 +6,7 @@ var shims = {
+     events: 'foo'
+ };
+ 
+-test('shim found', function(done) {
++it('shim found', function(done) {
+     resolve('events', { modules: shims }, function(err, path) {
+         assert.ifError(err);
+         assert.equal(path, 'foo');
+@@ -14,7 +14,7 @@ test('shim found', function(done) {
+     });
+ });
+ 
+-test('core shim not found', function(done) {
++it('core shim not found', function(done) {
+     resolve('http', {}, function(err, path) {
+         assert.ifError(err);
+         assert.equal(path, 'http');
+Index: node-browser-resolve/test/ext.js
+===================================================================
+--- node-browser-resolve.orig/test/ext.js
++++ node-browser-resolve/test/ext.js
+@@ -3,7 +3,7 @@ var resolve = require('../');
+ 
+ var fixtures_dir = __dirname + '/fixtures';
+ 
+-test('module to implicit extension', function(done) {
++it('module to implicit extension', function(done) {
+     var opts = { filename: fixtures_dir + '/node_modules/module-o/main.js' }
+     resolve('module-a', opts, function(err, path) {
+         assert.ifError(err);
+@@ -12,7 +12,7 @@ test('module to implicit extension', fun
+     });
+ });
+ 
+-test('implicit extension to implicit extension', function(done) {
++it('implicit extension to implicit extension', function(done) {
+     var opts = { filename: fixtures_dir + '/node_modules/module-p/main.js' }
+     resolve('./z.js', opts, function(err, path) {
+         assert.ifError(err);
+@@ -21,7 +21,7 @@ test('implicit extension to implicit ext
+     });
+ });
+ 
+-test('implicit extension to implicit extension', function(done) {
++it('implicit extension to implicit extension', function(done) {
+     var opts = { filename: fixtures_dir + '/node_modules/module-p/main.js' }
+     resolve('./z', opts, function(err, path) {
+         assert.ifError(err);
+@@ -30,7 +30,7 @@ test('implicit extension to implicit ext
+     });
+ });
+ 
+-test('explicit extension to explicit extension', function(done) {
++it('explicit extension to explicit extension', function(done) {
+     var opts = { filename: fixtures_dir + '/node_modules/module-q/main.js' }
+     resolve('./z.js', opts, function(err, path) {
+         assert.ifError(err);
+@@ -39,7 +39,7 @@ test('explicit extension to explicit ext
+     });
+ });
+ 
+-test('implicit extension to explicit extension', function(done) {
++it('implicit extension to explicit extension', function(done) {
+     var opts = { filename: fixtures_dir + '/node_modules/module-r/main.js' }
+     resolve('./z.js', opts, function(err, path) {
+         assert.ifError(err);
+@@ -48,7 +48,7 @@ test('implicit extension to explicit ext
+     });
+ });
+ 
+-test('module implicit extension to explicit extension', function(done) {
++it('module implicit extension to explicit extension', function(done) {
+     var opts = { filename: fixtures_dir + '/node_modules/module-s/main.js' }
+     resolve('whatever/z.js', opts, function(err, path) {
+         assert.ifError(err);
+@@ -57,7 +57,7 @@ test('module implicit extension to expli
+     });
+ });
+ 
+-test('module implicit extension to explicit extension', function(done) {
++it('module implicit extension to explicit extension', function(done) {
+     var opts = { filename: fixtures_dir + '/node_modules/module-s/main.js' }
+     resolve('whatever/z', opts, function(err, path) {
+         assert.ifError(err);
+Index: node-browser-resolve/test/false-sync.js
+===================================================================
+--- node-browser-resolve.orig/test/false-sync.js
++++ node-browser-resolve/test/false-sync.js
+@@ -4,13 +4,13 @@ var resolve = require('../');
+ 
+ var fixtures_dir = __dirname + '/fixtures';
+ 
+-test('false file', function() {
++it('false file', function() {
+     var parent_file = fixtures_dir + '/node_modules/false/index.js';
+     var p = resolve.sync('./fake.js', { filename: parent_file });
+     assert.equal(p, path.normalize(__dirname + '/../empty.js'));
+ });
+ 
+-test('false module', function() {
++it('false module', function() {
+     var parent_file = fixtures_dir + '/node_modules/false/index.js';
+     var p = resolve.sync('ignore-me', { filename: parent_file });
+     assert.equal(p, path.normalize(__dirname + '/../empty.js'));
+Index: node-browser-resolve/test/false.js
+===================================================================
+--- node-browser-resolve.orig/test/false.js
++++ node-browser-resolve/test/false.js
+@@ -4,7 +4,7 @@ var resolve = require('../');
+ 
+ var fixtures_dir = __dirname + '/fixtures';
+ 
+-test('false file', function(done) {
++it('false file', function(done) {
+     var parent_file = fixtures_dir + '/node_modules/false/index.js';
+     resolve('./fake.js', { filename: parent_file }, function(err, p) {
+         assert.ifError(err);
+@@ -13,7 +13,7 @@ test('false file', function(done) {
+     });
+ });
+ 
+-test('false module', function(done) {
++it('false module', function(done) {
+     var parent_file = fixtures_dir + '/node_modules/false/index.js';
+     resolve('ignore-me', { filename: parent_file }, function(err, p) {
+         assert.ifError(err);
+@@ -22,7 +22,7 @@ test('false module', function(done) {
+     });
+ });
+ 
+-test('false expand path', function(done) {
++it('false expand path', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/node_modules/module-m/lib/index.js'
+     };
+Index: node-browser-resolve/test/local-coffee.js
+===================================================================
+--- node-browser-resolve.orig/test/local-coffee.js
++++ node-browser-resolve/test/local-coffee.js
+@@ -3,7 +3,7 @@ var resolve = require('../');
+ 
+ var fixtures_dir = __dirname + '/fixtures-coffee';
+ 
+-test('local', function(done) {
++it('local', function(done) {
+     // resolve needs a parent filename or paths to be able to lookup files
+     // we provide a phony parent file
+     var parent = {
+Index: node-browser-resolve/test/local-sync.js
+===================================================================
+--- node-browser-resolve.orig/test/local-sync.js
++++ node-browser-resolve/test/local-sync.js
+@@ -3,7 +3,7 @@ var resolve = require('../');
+ 
+ var fixtures_dir = __dirname + '/fixtures';
+ 
+-test('local', function() {
++it('local', function() {
+     // resolve needs a parent filename or paths to be able to lookup files
+     // we provide a phony parent file
+     var path = resolve.sync('./foo', { filename: fixtures_dir + '/phony.js' });
+Index: node-browser-resolve/test/local.js
+===================================================================
+--- node-browser-resolve.orig/test/local.js
++++ node-browser-resolve/test/local.js
+@@ -3,7 +3,7 @@ var resolve = require('../');
+ 
+ var fixtures_dir = __dirname + '/fixtures';
+ 
+-test('local', function(done) {
++it('local', function(done) {
+     // resolve needs a parent filename or paths to be able to lookup files
+     // we provide a phony parent file
+     resolve('./foo', { filename: fixtures_dir + '/phony.js' }, function(err, path) {
+Index: node-browser-resolve/test/modules-coffee.js
+===================================================================
+--- node-browser-resolve.orig/test/modules-coffee.js
++++ node-browser-resolve/test/modules-coffee.js
+@@ -4,7 +4,7 @@ var resolve = require('../');
+ var fixtures_dir = __dirname + '/fixtures-coffee/node_modules';
+ 
+ // no package.json, load index.js
+-test('index.js of module dir', function(done) {
++it('index.js of module dir', function(done) {
+     var parent = {
+         paths: [ fixtures_dir ],
+         extensions: ['.js', '.coffee']
+@@ -17,7 +17,7 @@ test('index.js of module dir', function(
+ });
+ 
+ // package.json main field specifies other location
+-test('alternate main', function(done) {
++it('alternate main', function(done) {
+     var parent = {
+         paths: [ fixtures_dir ],
+         extensions: ['.js', '.coffee']
+@@ -30,7 +30,7 @@ test('alternate main', function(done) {
+ });
+ 
+ // package.json has 'browser' field which is a string
+-test('string browser field as main', function(done) {
++it('string browser field as main', function(done) {
+     var parent = {
+         paths: [ fixtures_dir ],
+         extensions: ['.js', '.coffee']
+@@ -43,7 +43,7 @@ test('string browser field as main', fun
+ });
+ 
+ // package.json has 'browser' field which is a string
+-test('string browser field as main - require subfile', function(done) {
++it('string browser field as main - require subfile', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-c/browser.js',
+         paths: [ fixtures_dir + '/module-c/node_modules' ],
+@@ -60,7 +60,7 @@ test('string browser field as main - req
+ // package.json has browser field as object
+ // one of the keys replaces the main file
+ // this would be done if the user needed to replace main and some other module
+-test('object browser field as main', function(done) {
++it('object browser field as main', function(done) {
+     var parent = {
+         paths: [ fixtures_dir ],
+         extensions: ['.js', '.coffee']
+@@ -75,7 +75,7 @@ test('object browser field as main', fun
+ // browser field in package.json maps ./foo.js -> ./browser.js
+ // when we resolve ./foo while in module-e, this mapping should take effect
+ // the result is that ./foo resolves to ./browser
+-test('object browser field replace file', function(done) {
++it('object browser field replace file', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-e/main.coffee',
+         extensions: ['.js', '.coffee']
+@@ -90,7 +90,7 @@ test('object browser field replace file'
+ 
+ // same as above, but without a paths field in parent
+ // should still checks paths on the filename of parent
+-test('object browser field replace file - no paths', function(done) {
++it('object browser field replace file - no paths', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-f/lib/main.coffee',
+         extensions: ['.js', '.coffee']
+@@ -103,7 +103,7 @@ test('object browser field replace file
+     });
+ });
+ 
+-test('replace module in browser field object', function(done) {
++it('replace module in browser field object', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-g/index.js',
+         extensions: ['.js', '.coffee']
+Index: node-browser-resolve/test/modules-sync.js
+===================================================================
+--- node-browser-resolve.orig/test/modules-sync.js
++++ node-browser-resolve/test/modules-sync.js
+@@ -4,25 +4,25 @@ var resolve = require('../');
+ var fixtures_dir = __dirname + '/fixtures/node_modules';
+ 
+ // no package.json, load index.js
+-test('index.js of module dir', function() {
++it('index.js of module dir', function() {
+     var path = resolve.sync('module-a', { paths: [ fixtures_dir ], package: { main: 'fixtures' } });
+     assert.equal(path, require.resolve('./fixtures/node_modules/module-a/index'));
+ });
+ 
+ // package.json main field specifies other location
+-test('alternate main', function() {
++it('alternate main', function() {
+     var path = resolve.sync('module-b', { paths: [ fixtures_dir ], package: { main: 'fixtures' } });
+     assert.equal(path, require.resolve('./fixtures/node_modules/module-b/main'));
+ });
+ 
+ // package.json has 'browser' field which is a string
+-test('string browser field as main', function() {
++it('string browser field as main', function() {
+     var path = resolve.sync('module-c', { paths: [ fixtures_dir ], package: { main: 'fixtures' } });
+     assert.equal(path, require.resolve('./fixtures/node_modules/module-c/browser'));
+ });
+ 
+ // package.json has 'browser' field which is a string
+-test('string browser field as main - require subfile', function() {
++it('string browser field as main - require subfile', function() {
+     var parent = {
+         filename: fixtures_dir + '/module-c/browser.js',
+         paths: [ fixtures_dir + '/module-c/node_modules' ],
+@@ -36,7 +36,7 @@ test('string browser field as main - req
+ // package.json has browser field as object
+ // one of the keys replaces the main file
+ // this would be done if the user needed to replace main and some other module
+-test('object browser field as main', function() {
++it('object browser field as main', function() {
+     var path = resolve.sync('module-d', { paths: [ fixtures_dir ], package: { main: 'fixtures' } });
+     assert.equal(path, require.resolve('./fixtures/node_modules/module-d/browser'));
+ });
+@@ -44,7 +44,7 @@ test('object browser field as main', fun
+ // package.json has browser field as object
+ // one of the keys replaces the main file
+ // however the main has no prefix and browser uses ./ prefix for the same file
+-test('object browser field as main', function() {
++it('object browser field as main', function() {
+     var path = resolve.sync('module-k', { paths: [ fixtures_dir ], package: { main: 'fixtures' } });
+     assert.equal(path, require.resolve('./fixtures/node_modules/module-k/browser'));
+ });
+@@ -52,7 +52,7 @@ test('object browser field as main', fun
+ // browser field in package.json maps ./foo.js -> ./browser.js
+ // when we resolve ./foo while in module-e, this mapping should take effect
+ // the result is that ./foo resolves to ./browser
+-test('object browser field replace file', function() {
++it('object browser field replace file', function() {
+     var parent = {
+         filename: fixtures_dir + '/module-e/main.js',
+         package: { main: './main.js' }
+@@ -63,7 +63,7 @@ test('object browser field replace file'
+ });
+ 
+ // browser field in package.json maps "module" -> "alternate module"
+-test('test foobar -> module-b replacement', function() {
++it('test foobar -> module-b replacement', function() {
+     var parent = {
+         filename: fixtures_dir + '/module-h/index.js',
+         package: { main: './index.js' }
+@@ -74,7 +74,7 @@ test('test foobar -> module-b replacemen
+ });
+ 
+ // browser field in package.json maps "relative file" -> "relative file" with no extension
+-test('test ./x -> ./y replacement', function() {
++it('test ./x -> ./y replacement', function() {
+     var parent = {
+         filename: fixtures_dir + '/module-t/index.js',
+         package: { main: './index.js' }
+@@ -85,7 +85,7 @@ test('test ./x -> ./y replacement', func
+ });
+ 
+ // same as above but replacing core
+-test('test core -> module-c replacement', function() {
++it('test core -> module-c replacement', function() {
+     var parent = {
+         filename: fixtures_dir + '/module-h/index.js',
+         package: { main: './index.js' }
+@@ -96,7 +96,7 @@ test('test core -> module-c replacement'
+ });
+ 
+ // browser field in package.json maps "module" -> "alternate module"
+-test('test foobar -> module-b replacement with transform', function() {
++it('test foobar -> module-b replacement with transform', function() {
+     var parent = {
+         filename: fixtures_dir + '/module-i/index.js',
+         package: { main: './index.js' }
+@@ -106,7 +106,7 @@ test('test foobar -> module-b replacemen
+     assert.equal(path, require.resolve('./fixtures/node_modules/module-b/main'));
+ });
+ 
+-test('test foobar -> module-i replacement with transform in replacement', function() {
++it('test foobar -> module-i replacement with transform in replacement', function() {
+     var parent = {
+         filename: fixtures_dir + '/module-j/index.js',
+         package: { main: './index.js' }
+@@ -118,7 +118,7 @@ test('test foobar -> module-i replacemen
+ 
+ // same as above, but without a paths field in parent
+ // should still checks paths on the filename of parent
+-test('object browser field replace file - no paths', function() {
++it('object browser field replace file - no paths', function() {
+     var parent = {
+         filename: fixtures_dir + '/module-f/lib/main.js',
+         package: { main: './lib/main.js' }
+@@ -128,7 +128,7 @@ test('object browser field replace file
+     assert.equal(path, require.resolve('./fixtures/node_modules/module-f/lib/browser'));
+ });
+ 
+-test('replace module in browser field object', function() {
++it('replace module in browser field object', function() {
+     var parent = {
+         filename: fixtures_dir + '/module-g/index.js',
+         package: { main: './index.js' }
+@@ -138,7 +138,7 @@ test('replace module in browser field ob
+     assert.equal(path, require.resolve('./fixtures/node_modules/module-g/foobar-browser'));
+ });
+ 
+-test('override engine shim', function() {
++it('override engine shim', function() {
+     var parent = {
+         filename: fixtures_dir + '/override-engine-shim/index.js',
+         package: { main: './index.js' },
+@@ -148,7 +148,7 @@ test('override engine shim', function()
+     assert.equal(path, require.resolve('./fixtures/node_modules/override-engine-shim/url-browser'));
+ });
+ 
+-test('alt-browser field', function() {
++it('alt-browser field', function() {
+     var parent = {
+         filename: fixtures_dir + '/alt-browser-field/index.js',
+         package: { main: './index.js' },
+Index: node-browser-resolve/test/modules.js
+===================================================================
+--- node-browser-resolve.orig/test/modules.js
++++ node-browser-resolve/test/modules.js
+@@ -4,7 +4,7 @@ var resolve = require('../');
+ var fixtures_dir = __dirname + '/fixtures/node_modules';
+ 
+ // no package.json, load index.js
+-test('index.js of module dir', function(done) {
++it('index.js of module dir', function(done) {
+     resolve('module-a', { paths: [ fixtures_dir ], package: { main: 'fixtures' } }, function(err, path, pkg) {
+         assert.ifError(err);
+         assert.equal(path, require.resolve('./fixtures/node_modules/module-a/index'));
+@@ -14,7 +14,7 @@ test('index.js of module dir', function(
+ });
+ 
+ // package.json main field specifies other location
+-test('alternate main', function(done) {
++it('alternate main', function(done) {
+     resolve('module-b', { paths: [ fixtures_dir ], package: { main: 'fixtures' } }, function(err, path, pkg) {
+         assert.ifError(err);
+         assert.equal(path, require.resolve('./fixtures/node_modules/module-b/main'));
+@@ -24,7 +24,7 @@ test('alternate main', function(done) {
+ });
+ 
+ // package.json has 'browser' field which is a string
+-test('string browser field as main', function(done) {
++it('string browser field as main', function(done) {
+     resolve('module-c', { paths: [ fixtures_dir ], package: { main: 'fixtures' } }, function(err, path, pkg) {
+         assert.ifError(err);
+         assert.equal(path, require.resolve('./fixtures/node_modules/module-c/browser'));
+@@ -34,7 +34,7 @@ test('string browser field as main', fun
+ });
+ 
+ // package.json has 'browser' field which is a string
+-test('string browser field as main - require subfile', function(done) {
++it('string browser field as main - require subfile', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-c/browser.js',
+         paths: [ fixtures_dir + '/module-c/node_modules' ],
+@@ -50,7 +50,7 @@ test('string browser field as main - req
+ });
+ 
+ // package.json has an alternative 'browser' field which is a string
+-test('string alt browser field as main - require subfile', function(done) {
++it('string alt browser field as main - require subfile', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-c/chromeapp.js',
+         paths: [ fixtures_dir + '/module-c/node_modules' ],
+@@ -69,7 +69,7 @@ test('string alt browser field as main -
+ // package.json has browser field as object
+ // one of the keys replaces the main file
+ // this would be done if the user needed to replace main and some other module
+-test('object browser field as main', function(done) {
++it('object browser field as main', function(done) {
+     resolve('module-d', { paths: [ fixtures_dir ] }, function(err, path, pkg) {
+         assert.ifError(err);
+         assert.equal(path, require.resolve('./fixtures/node_modules/module-d/browser'));
+@@ -81,7 +81,7 @@ test('object browser field as main', fun
+ // package.json has browser field as object
+ // one of the keys replaces the main file
+ // however the main has no prefix and browser uses ./ prefix for the same file
+-test('object browser field as main', function(done) {
++it('object browser field as main', function(done) {
+     resolve('module-k', { paths: [ fixtures_dir ] }, function(err, path, pkg) {
+         assert.ifError(err);
+         assert.equal(path, require.resolve('./fixtures/node_modules/module-k/browser'));
+@@ -90,7 +90,7 @@ test('object browser field as main', fun
+     });
+ });
+ 
+-test('deep module reference mapping', function(done) {
++it('deep module reference mapping', function(done) {
+     resolve('module-l/direct', { basedir: __dirname + '/fixtures' }, function(err, path, pkg) {
+         assert.ifError(err);
+         assert.equal(path, require.resolve('./fixtures/node_modules/module-l/browser-direct'));
+@@ -101,14 +101,14 @@ test('deep module reference mapping', fu
+ 
+ // package.json has browser field as object
+ // test that file resolves even though the file extension is omitted
+-test('deep module reference mapping without file extension - .js', function(done) {
++it('deep module reference mapping without file extension - .js', function(done) {
+     resolve('module-n/foo', { basedir: __dirname + '/fixtures' }, function(err, path, pkg) {
+         assert.ifError(err);
+         assert.equal(path, require.resolve('./fixtures/node_modules/module-n/browser-foo'));
+         done();
+     });
+ });
+-test('deep module reference mapping without file extension - .json', function(done) {
++it('deep module reference mapping without file extension - .json', function(done) {
+     resolve('module-n/bar', { basedir: __dirname + '/fixtures' }, function(err, path, pkg) {
+         assert.ifError(err);
+         assert.equal(path, require.resolve('./fixtures/node_modules/module-n/browser-bar'));
+@@ -119,7 +119,7 @@ test('deep module reference mapping with
+ // browser field in package.json maps ./foo.js -> ./browser.js
+ // when we resolve ./foo while in module-e, this mapping should take effect
+ // the result is that ./foo resolves to ./browser
+-test('object browser field replace file', function(done) {
++it('object browser field replace file', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-e/main.js',
+         package: { main: './main.js' }
+@@ -134,7 +134,7 @@ test('object browser field replace file'
+ });
+ 
+ // browser field in package.json maps "module" -> "alternate module"
+-test('test foobar -> module-b replacement', function(done) {
++it('test foobar -> module-b replacement', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-h/index.js',
+         package: { main: './index.js' }
+@@ -149,7 +149,7 @@ test('test foobar -> module-b replacemen
+ });
+ 
+ // same as above but replacing core
+-test('test core -> module-c replacement', function(done) {
++it('test core -> module-c replacement', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-h/index.js',
+         package: { main: './index.js' }
+@@ -164,7 +164,7 @@ test('test core -> module-c replacement'
+ });
+ 
+ // same as above but with alt browser
+-test('test core -> module-c replacement with alt browser', function(done) {
++it('test core -> module-c replacement with alt browser', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-h/index.js',
+         package: { main: './index.js' },
+@@ -180,7 +180,7 @@ test('test core -> module-c replacement
+ });
+ 
+ // browser field in package.json maps "module" -> "alternate module"
+-test('test foobar -> module-b replacement with transform', function(done) {
++it('test foobar -> module-b replacement with transform', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-i/index.js',
+         package: { main: './index.js' }
+@@ -195,7 +195,7 @@ test('test foobar -> module-b replacemen
+ });
+ 
+ // browser field in package.json maps "relative file" -> "relative file" with no extension
+-test('test ./x -> ./y replacement', function(done) {
++it('test ./x -> ./y replacement', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-t/index.js',
+         package: { main: './index.js' }
+@@ -208,7 +208,7 @@ test('test ./x -> ./y replacement', func
+     });
+ });
+ 
+-test('test foobar -> module-i replacement with transform in replacement', function(done) {
++it('test foobar -> module-i replacement with transform in replacement', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-j/index.js',
+         package: { main: './index.js' }
+@@ -226,7 +226,7 @@ test('test foobar -> module-i replacemen
+ 
+ // same as above, but without a paths field in parent
+ // should still checks paths on the filename of parent
+-test('object browser field replace file - no paths', function(done) {
++it('object browser field replace file - no paths', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-f/lib/main.js',
+         package: { main: './lib/main.js' }
+@@ -240,7 +240,7 @@ test('object browser field replace file
+     });
+ });
+ 
+-test('replace module in browser field object', function(done) {
++it('replace module in browser field object', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/module-g/index.js',
+         package: { main: './index.js' }
+@@ -254,7 +254,7 @@ test('replace module in browser field ob
+     });
+ });
+ 
+-test('override engine shim', function(done) {
++it('override engine shim', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/override-engine-shim/index.js',
+         package: { main: './index.js' },
+@@ -267,7 +267,7 @@ test('override engine shim', function(do
+     });
+ });
+ 
+-test('alt-browser field', function(done) {
++it('alt-browser field', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/alt-browser-field/index.js',
+         package: { main: './index.js' },
+@@ -282,7 +282,7 @@ test('alt-browser field', function(done)
+     });
+ });
+ 
+-test('alt-browser deep module reference mapping', function(done) {
++it('alt-browser deep module reference mapping', function(done) {
+     resolve('alt-browser-field/direct', {
+         basedir: __dirname + '/fixtures',
+         browser: 'chromeapp'
+@@ -294,7 +294,7 @@ test('alt-browser deep module reference
+     });
+ });
+ 
+-test('alt-browser fallback to "browser" on deps of deps', function(done) {
++it('alt-browser fallback to "browser" on deps of deps', function(done) {
+     var parent = {
+         filename: fixtures_dir + '/alt-browser-field/foo.js',
+         package: { main: './index.js' },
+@@ -310,7 +310,7 @@ test('alt-browser fallback to "browser"
+     });
+ });
+ 
+-test('not fail on accessing path name defined in Object.prototype', function (done) {
++it('not fail on accessing path name defined in Object.prototype', function (done) {
+     resolve('toString', { paths: [ fixtures_dir ] }, function(err, path, pkg) {
+         assert.ifError(err);
+         assert.equal(path, require.resolve('./fixtures/node_modules/toString/index'));
+@@ -318,7 +318,7 @@ test('not fail on accessing path name de
+     });
+ });
+ 
+-test('respect symlinks', function (done) {
++it('respect symlinks', function (done) {
+     // some systems (e.g. rush, pnpm) use symlinks to create a recursive dependency graph
+     // instead of relying on the hoisting aspect of the node module resolution algorithm (like npm and yarn do)
+     // in these cases, we want to resolve to the real path of a module, so that the tree structure below
